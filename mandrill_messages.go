@@ -19,12 +19,13 @@ import (
 )
 
 // see https://mandrillapp.com/api/docs/messages.html
-const messages_send_endpoint string = "/messages/send.json"                   // Send a new transactional message through Mandrill
-const messages_info_endpoint string = "/messages/info.json"                   // Get info about a message
-const messages_send_template_endpoint string = "/messages/send-template.json" // Send a new transactional message through Mandrill using a template
-const messages_search_endpoint string = "/messages/search.json"               // Search the content of recently sent messages and optionally narrow by date range, tags and senders
-const messages_parse_endpoint string = "/messages/parse.json"                 // Parse the full MIME document for an email message, returning the content of the message broken into its constituent pieces
-const messages_send_raw_endpoint string = "/messages/send-raw.json"           // Take a raw MIME document for a message, and send it exactly as if it were sent over the SMTP protocol
+const messages_send_endpoint string = "/messages/send.json"                             // Send a new transactional message through Mandrill
+const messages_info_endpoint string = "/messages/info.json"                             // Get info about a message
+const messages_send_template_endpoint string = "/messages/send-template.json"           // Send a new transactional message through Mandrill using a template
+const messages_search_endpoint string = "/messages/search.json"                         // Search the content of recently sent messages and optionally narrow by date range, tags and senders
+const messages_search_time_series_endpoint string = "/messages/search-time-series.json" // Search the content of recently sent messages and return the aggregated hourly stats for matching messages
+const messages_parse_endpoint string = "/messages/parse.json"                           // Parse the full MIME document for an email message, returning the content of the message broken into its constituent pieces
+const messages_send_raw_endpoint string = "/messages/send-raw.json"                     // Take a raw MIME document for a message, and send it exactly as if it were sent over the SMTP protocol
 const messages_content_endpoint string = "/messages/content.json"
 
 func (a *MandrillAPI) MessageContent(id string) (*MessageContent, error) {
@@ -64,6 +65,33 @@ func (a *MandrillAPI) MessageSendTemplate(templateName string, templateContent [
 	params["async"] = async
 	params["template_content"] = templateContent
 	err := parseMandrillJson(a, messages_send_template_endpoint, params, &response)
+	return response, err
+}
+
+func (a *MandrillAPI) MessageSearchTimeSeries(searchRequest SearchRequest) ([]SearchTimeSeriesResponse, error) {
+	var response []SearchTimeSeriesResponse
+	var params map[string]interface{} = make(map[string]interface{})
+
+	if searchRequest.Query != "" {
+		params["query"] = searchRequest.Query
+	}
+	if !searchRequest.DateFrom.IsZero() {
+		params["date_from"] = searchRequest.DateFrom
+	}
+	if !searchRequest.DateTo.IsZero() {
+		params["date_to"] = searchRequest.DateTo
+	}
+	if len(searchRequest.Tags) > 0 {
+		params["tags"] = searchRequest.Tags
+	}
+	if len(searchRequest.Senders) > 0 {
+		params["senders"] = searchRequest.Senders
+	}
+	params["limit"] = searchRequest.Limit
+	if len(searchRequest.APIKeys) > 0 {
+		params["api_keys"] = searchRequest.APIKeys
+	}
+	err := parseMandrillJson(a, messages_search_time_series_endpoint, params, &response)
 	return response, err
 }
 
@@ -138,6 +166,20 @@ func (t *TS) UnmarshalJSON(data []byte) error {
 	*t = TS{time.Unix(i, 0)}
 
 	return nil
+}
+
+type SearchTimeSeriesResponse struct {
+	Time string `json:"time"`
+	Sent int    `json:"sent"`
+	Sent int    `json:"hard_bounces"`
+	Sent int    `json:"soft_bounces"`
+	Sent int    `json:"rejects"`
+	Sent int    `json:"complaints"`
+	Sent int    `json:"unsubs"`
+	Sent int    `json:"opens"`
+	Sent int    `json:"unique_opens"`
+	Sent int    `json:"clicks"`
+	Sent int    `json:"unique_clicks"`
 }
 
 type SearchResponse struct {
