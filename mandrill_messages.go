@@ -169,17 +169,17 @@ func (t *TS) UnmarshalJSON(data []byte) error {
 }
 
 type SearchTimeSeriesResponse struct {
-	Time string `json:"time"`
-	Sent int    `json:"sent"`
-	Sent int    `json:"hard_bounces"`
-	Sent int    `json:"soft_bounces"`
-	Sent int    `json:"rejects"`
-	Sent int    `json:"complaints"`
-	Sent int    `json:"unsubs"`
-	Sent int    `json:"opens"`
-	Sent int    `json:"unique_opens"`
-	Sent int    `json:"clicks"`
-	Sent int    `json:"unique_clicks"`
+	Time         string `json:"time"`
+	Sent         int    `json:"sent"`
+	HardBounces  int    `json:"hard_bounces"`
+	SoftBounces  int    `json:"soft_bounces"`
+	Rejects      int    `json:"rejects"`
+	Complaints   int    `json:"complaints"`
+	Unsubs       int    `json:"unsubs"`
+	Opens        int    `json:"opens"`
+	UniqueOpens  int    `json:"unique_opens"`
+	Clicks       int    `json:"clicks"`
+	UniqueClicks int    `json:"unique_clicks"`
 }
 
 type SearchResponse struct {
