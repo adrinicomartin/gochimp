@@ -34,18 +34,20 @@ func (a *MandrillAPI) WhitelistsList(email string) ([]Whitelist, error) {
 
 // WhitelistsAdd can error with one of the following: Invalid_Key, ValidationError, GeneralError
 func (a *MandrillAPI) WhitelistsAdd(email string, comment string) (bool, error) {
+	var response map[string]interface{}
+	retval := false
 	if email == "" {
-		return response, errors.New("email cannot be blank")
+		return retval, errors.New("email cannot be blank")
 	}
 	if comment == "" {
-		return response, errors.New("comment cannot be blank")
+		return retval, errors.New("comment cannot be blank")
 	}
 	var params map[string]interface{} = make(map[string]interface{})
 	params["email"] = email
 	params["comment"] = comment
 
 	err := parseMandrillJson(a, whitelists_add_endpoint, params, &response)
-	bool := false
+	ok := false
 	if err == nil {
 		retval, ok = response["added"].(bool)
 		if ok != true {
@@ -59,14 +61,14 @@ func (a *MandrillAPI) WhitelistsAdd(email string, comment string) (bool, error) 
 // can error with one of the following: Invalid_Reject, Invalid_Key, ValidationError, GeneralError
 func (a *MandrillAPI) WhitelistsDelete(email string) (bool, error) {
 	var response map[string]interface{}
-	bool := false
+	retval := false
 	if email == "" {
 		return retval, errors.New("email cannot be blank")
 	}
 	var params map[string]interface{} = make(map[string]interface{})
 	params["email"] = email
 	err := parseMandrillJson(a, whitelists_delete_endpoint, params, &response)
-	bool := false
+	ok := false
 	if err == nil {
 		retval, ok = response["deleted"].(bool)
 		if ok != true {

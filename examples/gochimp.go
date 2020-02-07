@@ -2,8 +2,9 @@ package main
 
 import (
 	"fmt"
-	"github.com/mattbaird/gochimp"
 	"os"
+
+	"github.com/adrinicomartin/gochimp"
 )
 
 func main() {

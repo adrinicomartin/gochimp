@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 
-	"github.com/picatic/gochimp"
+	"github.com/adrinicomartin/gochimp"
 )
 
 func main() {
