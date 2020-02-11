@@ -36,8 +36,32 @@ func (a *MandrillAPI) MessageContent(id string) (*MessageContent, error) {
 	return &response, err
 }
 
-func (a *MandrillAPI) MessageInfo(id string) (map[string]interface{}, error) {
-	var response map[string]interface{}
+type MessageInfo struct {
+	Timestamp   time.Duration     `json:"ts"`
+	ID          string            `json:"_id"`
+	State       string            `json:"state"`
+	Subject     string            `json:"subject"`
+	Email       string            `json:"email"`
+	Tags        []string          `json:"tags"`
+	Opens       int               `json:"opens"`
+	Clicks      int               `json:"clicks"`
+	BgtoolsCode int               `json:"bgtools_code"`
+	Diag        string            `json:"diag"`
+	Metadata    map[string]string `json:"metadata"`
+	SMTPEvents  []SMTPEvent       `json:"smtp_events"`
+	Resends     []Resend          `json:"resends"`
+	Reject      struct {
+		Reason      string `json:"reason"`
+		LastEventAt string `json:"last_event_at"`
+	} `json:"reject"`
+	Sender            string           `json:"sender"`
+	BounceDescription string           `json:"bounce_description"`
+	OpensDetail       []ActivityDetail `json:"opens_detail"`
+	ClicksDetail      []ActivityDetail `json:"clicks_detail"`
+}
+
+func (a *MandrillAPI) MessageInfo(id string) (MessageInfo, error) {
+	var response MessageInfo
 	var params map[string]interface{} = make(map[string]interface{})
 	params["id"] = id
 	err := parseMandrillJson(a, messages_info_endpoint, params, &response)
