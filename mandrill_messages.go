@@ -37,7 +37,7 @@ func (a *MandrillAPI) MessageContent(id string) (*MessageContent, error) {
 }
 
 type MessageInfo struct {
-	Timestamp   time.Duration     `json:"ts"`
+	Timestamp   TS                `json:"ts"`
 	ID          string            `json:"_id"`
 	State       string            `json:"state"`
 	Subject     string            `json:"subject"`
@@ -207,7 +207,7 @@ type SearchTimeSeriesResponse struct {
 }
 
 type SearchResponse struct {
-	Timestamp    time.Duration     `json:"ts"`
+	Timestamp    TS                `json:"ts"`
 	Id           string            `json:"_id"`
 	Sender       string            `json:"sender"`
 	Subject      string            `json:"subject"`
@@ -226,24 +226,24 @@ type SearchResponse struct {
 }
 
 type Resend struct {
-	Timestamp time.Duration `json:"ts"`
+	Timestamp TS `json:"ts"`
 }
 
 type SMTPEvent struct {
-	Timestamp     time.Duration `json:"ts"`
-	Type          string        `json:"type"`
-	Diagnostics   string        `json:"diag"`
-	SourceIP      string        `json:"source_ip"`
-	DestinationIP string        `json:"destination_ip"`
-	Size          int           `json:"size"`
+	Timestamp     TS     `json:"ts"`
+	Type          string `json:"type"`
+	Diagnostics   string `json:"diag"`
+	SourceIP      string `json:"source_ip"`
+	DestinationIP string `json:"destination_ip"`
+	Size          int    `json:"size"`
 }
 
 type ActivityDetail struct {
-	Timestamp time.Duration `json:"ts"`
-	IP        string        `json:"ip"`
-	Url       string        `json:"url"`
-	Location  string        `json:"location"`
-	UserAgent string        `json:"ua"`
+	Timestamp TS     `json:"ts"`
+	IP        string `json:"ip"`
+	Url       string `json:"url"`
+	Location  string `json:"location"`
+	UserAgent string `json:"ua"`
 }
 
 type SearchRequest struct {
